@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Flight Updates</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        #messages li {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #messages li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Live Flight Updates</h1>
+
+<div id="status">Connecting...</div>
+
+<ul id="messages"></ul>
+
+<script>
+    const socket = new WebSocket('ws://localhost:8081/websocket/flight/live');
+
+    const statusDiv = document.getElementById('status');
+    const messagesList = document.getElementById('messages');
+
+    // Connection established
+    socket.onopen = function () {
+        statusDiv.textContent = 'Connected to WebSocket';
+        statusDiv.style.color = 'green';
+        console.log('WebSocket connection established.');
+    };
+
+    // Receiving messages
+    socket.onmessage = function (event) {
+        console.log('Message received: ' + event.data);
+        const newMessage = document.createElement('li');
+        newMessage.textContent = event.data;
+        messagesList.appendChild(newMessage);
+
+        // Scroll to bottom
+        messagesList.scrollTop = messagesList.scrollHeight;
+    };
+
+    // Connection error
+    socket.onerror = function (error) {
+        console.error('WebSocket Error: ' + error);
+        statusDiv.textContent = 'WebSocket Error';
+        statusDiv.style.color = 'red';
+    };
+
+    // Connection closed
+    socket.onclose = function () {
+        console.log('WebSocket connection closed.');
+        statusDiv.textContent = 'WebSocket connection closed';
+        statusDiv.style.color = 'red';
+    };
+</script>
+
+</body>
+</html>
