@@ -7,7 +7,8 @@ This project is a real-time flight tracking solution built using Spring Boot, Ap
 
 ## 🗺️ How It Works
 
-![image1](image1)
+![architecture](https://github.com/user-attachments/assets/e73c12b0-f95e-4376-a81b-dc56c9e59ecf)
+
 
 1. **Kafka Integration:**  
    - The system listens to a Kafka topic for incoming flight status updates (JSON format).
